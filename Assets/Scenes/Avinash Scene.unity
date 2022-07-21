@@ -625,6 +625,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: spawnManager Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 8334321820991445457, guid: 830d0328a09690542b2a5698907ba92a,
+        type: 3}
+      propertyPath: ZSpawnRandomness
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 830d0328a09690542b2a5698907ba92a, type: 3}
 --- !u!1 &1498159004 stripped
