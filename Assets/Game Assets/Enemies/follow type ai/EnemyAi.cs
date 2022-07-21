@@ -1,48 +1,78 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyAi : MonoBehaviour,IDamagable
 {
-    public GameObject Target;
-    public float MoveSpeed;
-   
+    public bool RunOnce;
+    public float UpdateFrequency;
+
+    [Header("Target Info")]
+    [SerializeField] Transform TargetPosition;
+    public string TargetTag;
+    
 
     [Header("Enemy Stats")]
-    public int Health;
+    public int CurrentHealth;
     public int MaxHealth;
     public int Damage;
     public float PushForce;
+    public float MoveSpeed;
 
-    Rigidbody2D rb;
+    [Header("Enemy Componants")]
+    Rigidbody rb;
+    [HideInInspector] public NavMeshAgent Agent;
+    private void Awake()
+    {
+        InitializeEverythingAtAwake();
+    }
     void Start()
     {
+       
         EnemyManager.instance.AddEnemyToList(this);
-        rb = GetComponent<Rigidbody2D>();
-        Health = MaxHealth;
-
+        
     }
     
     void Update()
     {
-        FollowTarget();
+        Agent.speed = MoveSpeed;
+        StartCoroutine(SetTargetDestination());
     }
 
-    void FollowTarget()
+    IEnumerator SetTargetDestination()
     {
-        Target = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0).gameObject;
-        transform.position = (Vector2.MoveTowards(transform.position, Target.transform.position, MoveSpeed * Time.deltaTime));
+        if(Agent.isActiveAndEnabled && gameObject.activeInHierarchy && !RunOnce)
+        {
+            Agent.SetDestination(GetTargetPosition());
+            RunOnce = true;
+            yield return new WaitForSeconds(UpdateFrequency);
+            RunOnce = false;
+        }
+        Debug.LogWarning( gameObject.name +"enemy object is disabled or its has ran more than once");
+    }
+
+    Vector3 GetTargetPosition()
+    {
+        TargetPosition = GameObject.FindGameObjectWithTag(TargetTag).GetComponent<Transform>();
+        if (TargetPosition != null)
+        {
+            return TargetPosition.position;
+        }
+        Debug.AssertFormat(TargetPosition != null, " set target position  of enemy is null");
+        return Vector3.zero  ;
+
     }
 
     public void TakeDamage(int Damage)
     {
-        if (Health > 0)
+        if (CurrentHealth > 0)
         {
-            Health -= Damage;
+            CurrentHealth -= Damage;
             //Debug.Log("enemy taken Damage");
             
         }
-        else if (Health <= 0)
+        else if (CurrentHealth <= 0)
         {
             //Debug.Log("enemy died");
             EnemyManager.instance.RemoveEnemyFromList(this);
@@ -58,6 +88,12 @@ public class EnemyAi : MonoBehaviour,IDamagable
             damagable.TakeDamage(Damage);
 
         }
+    }
 
+    void InitializeEverythingAtAwake()
+    {
+        Agent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
+        CurrentHealth = MaxHealth;
     }
 }

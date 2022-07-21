@@ -96,7 +96,7 @@ public class EnemyManager : MonoBehaviour
     {
         foreach(EnemyAi ai in EnemyList)
         {
-            ai.Health += EventHealthAddon;
+            ai.CurrentHealth += EventHealthAddon;
             Debug.Log("increase health");
         }
     }
@@ -104,7 +104,7 @@ public class EnemyManager : MonoBehaviour
     {
         foreach (EnemyAi ai in EnemyList)
         {
-            ai.Health -= EventHealthAddon;
+            ai.CurrentHealth -= EventHealthAddon;
             Debug.Log("decrease health");
         }
     }
