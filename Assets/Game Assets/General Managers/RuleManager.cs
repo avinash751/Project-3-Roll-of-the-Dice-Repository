@@ -90,13 +90,11 @@ public class RuleManager : MonoBehaviour
     void resetall()
     {
         player.jump = true;
-        player.gravity = 1.0f;
         player.move = true;
     }
 
     public void lowgravity()
     {
-        player.gravity = 0.3f;
         Debug.Log("low gravity");
     }
     public void nomovement()
