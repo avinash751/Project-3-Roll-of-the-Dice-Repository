@@ -32,7 +32,7 @@ Preset:
   - target: {fileID: 0}
     propertyPath: PrefabToSpawn
     value: 
-    objectReference: {fileID: 1831314172634858841, guid: 64764f3b2f7617f4d9b3418da007fd5c,
+    objectReference: {fileID: 6610430934051667856, guid: 64764f3b2f7617f4d9b3418da007fd5c,
       type: 3}
   - target: {fileID: 0}
     propertyPath: XSpawnRandomness

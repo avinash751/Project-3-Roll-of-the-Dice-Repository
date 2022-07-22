@@ -44,7 +44,7 @@ public class EnemyAi : MonoBehaviour,IDamagable
     {
         if(Agent.isActiveAndEnabled && gameObject.activeInHierarchy && !RunOnce)
         {
-            Agent.SetDestination(GetTargetPosition());
+             Agent.SetDestination(GetTargetPosition());
             RunOnce = true;
             yield return new WaitForSeconds(UpdateFrequency);
             RunOnce = false;

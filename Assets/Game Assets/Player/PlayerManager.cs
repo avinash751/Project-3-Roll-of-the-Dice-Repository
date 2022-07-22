@@ -38,15 +38,6 @@ public class PlayerManager : MonoBehaviour, IDamagable
     }
 
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
-        if(damagable != null)
-        {
-            damagable.TakeDamage(Damage);
-        }
-
-    }
 
     void Update()
     {
