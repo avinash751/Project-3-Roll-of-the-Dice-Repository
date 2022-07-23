@@ -50,7 +50,7 @@ public class EnemyAi : MonoBehaviour,IDamagable
             yield return new WaitForSeconds(UpdateFrequency);
             RunOnce = false;
         }
-        Debug.LogWarning( gameObject.name +"enemy object is disabled or its has ran more than once");
+        //Debug.LogWarning( gameObject.name +"enemy object is disabled or its has ran more than once");
     }
 
     Vector3 GetTargetPosition()
@@ -60,7 +60,7 @@ public class EnemyAi : MonoBehaviour,IDamagable
         {
             return TargetPosition.position;
         }
-        Debug.AssertFormat(TargetPosition != null, " set target position  of enemy is null");
+       // Debug.AssertFormat(TargetPosition != null, " set target position  of enemy is null");
         return Vector3.zero  ;
 
     }
