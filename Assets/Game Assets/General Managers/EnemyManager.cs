@@ -8,23 +8,33 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance { get; private set;}
 
-    [Header(" events info")]
+    [Header(" Enemy Diceevents info")]
     public float TimeAddon;
     public bool TimeConfirmed;
     public bool EventPlayed;
     public float TotalTimeForEvent;
-    public int EventNumber;
-    public int EventHealthAddon;
-    public int EventDamageAddon;
+    int EventNumber;
+    public float UpdateFrequency;
+    bool RunOnce;
+    
+    [Header(" Enemy stats addon info")]
+    public int EnemyHealthAddon;
+    public int EnemyDamageAddon;
+    public float SpawnRateAddon;
+    public bool SpawnEvent;
 
     [Header(" Finding references info")]
 
     public List<EnemyAi> EnemyList = new List<EnemyAi>();
-    public List<SpawnManager1> spawnList = new List<SpawnManager1>();
+    public List<SpawnManager1> EnmeySpawnList = new List<SpawnManager1>();
 
 
-    public delegate void EnemyDiceEvent();
+    public delegate void EnemyDiceEvent ();
+    public  EnemyDiceEvent EnemyEvent;
 
+    
+
+   
     public void Awake()
     {
         if(instance == null)
@@ -43,7 +53,8 @@ public class EnemyManager : MonoBehaviour
 
     private void Update()
     {
-        PlayAnEvent();
+        RandomizeAndPickAnEvent();
+        StartCoroutine(RunExistingEventTilNextOne());
     }
 
     float RequiredTimeTOPlayAnEnemyEvent()
@@ -53,78 +64,135 @@ public class EnemyManager : MonoBehaviour
             TimeConfirmed = true;
             EventPlayed = false;
             TotalTimeForEvent = GameManager.instance.CurrentTime + TimeAddon;
-            return TotalTimeForEvent; ;
-        }
-        else
-        {
             return TotalTimeForEvent;
         }
+        return TotalTimeForEvent;
     }
 
-    void PlayAnEvent()
+ 
+    void RandomizeAndPickAnEvent()
     {
         RequiredTimeTOPlayAnEnemyEvent();
-
-        if (!EventPlayed && GameManager.instance.CurrentTime > TotalTimeForEvent && TimeConfirmed )
+        if (!EventPlayed && GameManager.instance.CurrentTime > TotalTimeForEvent  && TimeConfirmed)
         {
-            EventNumber = Random.Range(1, 5);
+            ReverseEnemyAndSpawnChnages();
+            EventNumber = Random.Range(1, 6);
             Debug.Log("enemy dice started");
             switch (EventNumber)
             {
                 case 1:
-                    IncreaseHealth();
+                    RunEventOnceWithChanges(IncreaseHealth, EnemyHealthAddon = Random.Range(1, 3));
                     break;
                 case 2:
-                    DecresseHealth();
+                    RunEventOnceWithChanges(DecresseHealth, EnemyHealthAddon = Random.Range(1, 3));
                     break;
                 case 3:
-                    IncreaseDamage();
+                    RunEventOnceWithChanges(IncreaseDamage, EnemyDamageAddon = Random.Range(1, 3));
                     break;
                 case 4:
-                    DecreaseDamage();
+                    RunEventOnceWithChanges(DecreaseDamage, EnemyDamageAddon = Random.Range(1, 3));
+                    break;
+                case 5:
+                    RunEventOnceWithChanges(IncreaseSpawnRate, SpawnRateAddon = Random.Range(0.1f, 0.8f), SpawnEvent = true);
                     break;
                 default:
                     break;
-                    
             }
-
             TimeConfirmed = false;
             EventPlayed = true;
         }
     }
+
+    IEnumerator RunExistingEventTilNextOne() // it will continue to call existing event till the next event randomisation
+    {
+        if ( GameManager.instance.CurrentTime < RequiredTimeTOPlayAnEnemyEvent() && EnemyEvent!=null && !SpawnEvent)
+        {
+            EnemyEvent();
+            RunOnce = true;
+            yield return new WaitForSeconds(UpdateFrequency);
+            RunOnce = false;
+            Debug.Log("all enemies and objects updated to event info");
+        }
+    }
     public void IncreaseHealth()
     {
-        foreach(EnemyAi ai in EnemyList)
+        Debug.Log("increase health");
+        foreach (EnemyAi ai in EnemyList)
         {
-            ai.CurrentHealth += EventHealthAddon;
-            Debug.Log("increase health");
+            if(!ai.StatsChangedByEvent)
+            {
+                ai.CurrentHealth += EnemyHealthAddon;
+                ai.StatsChangedByEvent = true;
+            }
         }
     }
     public void DecresseHealth()
     {
+        Debug.Log("decrease health");
         foreach (EnemyAi ai in EnemyList)
         {
-            ai.CurrentHealth -= EventHealthAddon;
-            Debug.Log("decrease health");
+            if (!ai.StatsChangedByEvent)
+            {
+                ai.CurrentHealth -= EnemyHealthAddon;
+                ai.StatsChangedByEvent = true;
+            }
+                
         }
     }
 
     public void IncreaseDamage()
     {
+        Debug.Log("increase damage");
         foreach (EnemyAi ai in EnemyList)
         {
-            ai.Damage += EventDamageAddon;
-            Debug.Log("increase damage");
+            if (!ai.StatsChangedByEvent)
+            {
+                ai.Damage += EnemyDamageAddon;
+                ai.StatsChangedByEvent = true;
+            }
         }
     }
 
     public void DecreaseDamage()
     {
+        Debug.Log("decrease damage");
         foreach (EnemyAi ai in EnemyList)
         {
-            ai.Damage -= EventDamageAddon;
-            Debug.Log("decrease damage");
+            if (!ai.StatsChangedByEvent)
+            {
+                ai.Damage -= EnemyDamageAddon;
+                ai.StatsChangedByEvent = true;
+            }
+                
         }
+    }
+
+    public void IncreaseSpawnRate()
+    {
+        Debug.Log("spawnRateIncreased");
+        foreach (SpawnManager1 spawn in EnmeySpawnList)
+        {
+            if (!spawn.StatsChangedByEvent)
+            {
+                spawn.Spawnrate -= SpawnRateAddon;
+                spawn.StatsChangedByEvent= true;
+            }
+               
+        }
+    }
+
+    public void  ReverseEnemyAndSpawnChnages()
+    {
+        foreach(EnemyAi ai in EnemyList)
+        {
+            ai.StatsChangedByEvent = false;
+        }
+
+        foreach (SpawnManager1 spawn in EnmeySpawnList)
+        {
+            spawn.StatsChangedByEvent = false;
+        }
+
     }
     public void AddEnemyToList(EnemyAi enemy)
     {
@@ -137,12 +205,25 @@ public class EnemyManager : MonoBehaviour
     }
     public void AddSpawnMangerToList(SpawnManager1 spawn)
     {
-        spawnList.Add(spawn);
+        EnmeySpawnList.Add(spawn);
     }
 
     public void removeSpawnMangeroList(SpawnManager1 spawn)
     {
-        spawnList.Remove(spawn);
+        EnmeySpawnList.Remove(spawn);
     }
+
+    void RunEventOnceWithChanges<T>(EnemyDiceEvent RandomEvent,T SpecifyChange)
+    {
+        EnemyEvent = RandomEvent;
+        RandomEvent();
+    }
+    void RunEventOnceWithChanges<T1,T2>(EnemyDiceEvent RandomEvent, T1 SpecifyChange,T2 SpecifyChange2)
+    {
+        EnemyEvent = RandomEvent;
+        RandomEvent();
+    }
+
+
 
 }

@@ -14,11 +14,12 @@ public class EnemyAi : MonoBehaviour,IDamagable
     
 
     [Header("Enemy Stats")]
-    public int CurrentHealth;
     public int MaxHealth;
+    public int CurrentHealth;
     public int Damage;
-    public float PushForce;
     public float MoveSpeed;
+    public float PushForce;
+    public bool StatsChangedByEvent;
 
     [Header("Enemy Componants")]
     Rigidbody rb;
