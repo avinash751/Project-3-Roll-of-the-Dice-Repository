@@ -6,8 +6,10 @@ public class player : MonoBehaviour
 {
     private CharacterController controller;
     public static float speed = 5.0f;
+    private float gravity = 1;
     public static bool move = true;
     public static bool jump = true;
+    private float yvelocity;
 
  
  
@@ -24,11 +26,17 @@ public class player : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontal, 0, vertical);
         Vector3 velocity = direction * speed;
-
+        velocity.y = yvelocity; 
+        
         if (move == true)
         {
             controller.Move(velocity * Time.deltaTime);
         }
+        if (controller.isGrounded == false)
+        {
+            yvelocity = yvelocity - gravity;
+        }
+
         
     }
 
