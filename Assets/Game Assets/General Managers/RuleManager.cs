@@ -104,7 +104,7 @@ public class RuleManager : MonoBehaviour
     }
     public void nojumping()
     {
-        player.jump = false;
+        
         Debug.Log("NO JUMPING");
     }
 

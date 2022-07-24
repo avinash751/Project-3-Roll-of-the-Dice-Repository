@@ -4,27 +4,21 @@ using UnityEngine;
 
 public class playeraiming : MonoBehaviour
 {
-    Vector3 mouseWorldSpace;
 
-    private void Update()
+    void Update()
     {
-
-        Vector3 mouseScreenPosition = Input.mousePosition;
-        mouseScreenPosition.z = transform.position.z;
-        mouseWorldSpace = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-        transform.LookAt(mouseWorldSpace, -Vector3.forward);
-        transform.eulerAngles = new Vector3(0, -transform.eulerAngles.z - 90, 0); 
-
-
-       /* Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
+
+        Debug.DrawRay(ray.origin, ray.direction * 1000, Color.white);
+
         if (Physics.Raycast(ray, out hit))
         {
-            transform.LookAt(hit.point); // Look at the point
-            transform.rotation = Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, 0));
-        } */
-           
-    }   
-  
-}
+            Vector3 targetPosition = new Vector3(hit.point.x, transform.position.y, hit.point.z);
 
+            Quaternion rotation = Quaternion.LookRotation(targetPosition - transform.position);
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * 10.0f);
+        }
+    }
+}
