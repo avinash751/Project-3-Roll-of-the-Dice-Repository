@@ -18,11 +18,12 @@ public class EnemyAi : MonoBehaviour,IDamagable
     public int CurrentHealth;
     public int Damage;
     public float MoveSpeed;
-    public float PushForce;
     public bool StatsChangedByEvent;
+    public static bool EnableEnemyCollsion;
+    public GameObject sphereCollisionObject;
 
     [Header("Enemy Componants")]
-    Rigidbody rb;
+     public static Rigidbody rb;
     [HideInInspector] public NavMeshAgent Agent;
     private void Awake()
     {
@@ -89,6 +90,13 @@ public class EnemyAi : MonoBehaviour,IDamagable
             damagable.TakeDamage(Damage);
 
         }
+
+        if(damagable != null && EnableEnemyCollsion)
+        {
+            Debug.Log("enemy collided");
+            GameObject dupliacte = Instantiate(sphereCollisionObject, collision.transform.position, Quaternion.identity);
+            Destroy(dupliacte, 0.15f);
+        } 
     }
 
     void InitializeEverythingAtAwake()

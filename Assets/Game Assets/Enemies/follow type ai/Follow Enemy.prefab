@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1340902098626076060}
   m_Layer: 0
   m_Name: eye
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -192,7 +192,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6610430934051667856}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 624c978fa105a814282231c766d4fa5e, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5000001
@@ -215,11 +215,13 @@ MonoBehaviour:
   UpdateFrequency: 0.3
   TargetPosition: {fileID: 0}
   TargetTag: Player
-  CurrentHealth: 0
   MaxHealth: 5
+  CurrentHealth: 0
   Damage: 1
-  PushForce: 1
   MoveSpeed: 3
+  StatsChangedByEvent: 0
+  sphereCollisionObject: {fileID: 1794119826599410194, guid: 5614281ced75c164c8367e3f1e0928d5,
+    type: 3}
   Agent: {fileID: 0}
 --- !u!195 &5214267688035836937
 NavMeshAgent:
@@ -251,7 +253,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6610430934051667856}
   serializedVersion: 2
-  m_Mass: 5
+  m_Mass: 1
   m_Drag: 13
   m_AngularDrag: 0.1
   m_UseGravity: 1

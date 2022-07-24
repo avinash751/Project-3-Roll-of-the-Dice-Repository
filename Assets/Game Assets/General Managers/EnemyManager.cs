@@ -17,11 +17,13 @@ public class EnemyManager : MonoBehaviour
     public float UpdateFrequency;
     bool RunOnce;
     
+
     [Header(" Enemy stats addon info")]
     public int EnemyHealthAddon;
     public int EnemyDamageAddon;
     public float SpawnRateAddon;
     public bool SpawnEvent;
+   
 
     [Header(" Finding references info")]
 
@@ -29,7 +31,7 @@ public class EnemyManager : MonoBehaviour
     public List<SpawnManager1> EnmeySpawnList = new List<SpawnManager1>();
 
 
-    public delegate void EnemyDiceEvent ();
+    public delegate void EnemyDiceEvent();
     public  EnemyDiceEvent EnemyEvent;
 
     
@@ -76,7 +78,7 @@ public class EnemyManager : MonoBehaviour
         if (!EventPlayed && GameManager.instance.CurrentTime > TotalTimeForEvent  && TimeConfirmed)
         {
             ReverseEnemyAndSpawnChnages();
-            EventNumber = Random.Range(1, 6);
+            EventNumber = Random.Range(1, 7);
             Debug.Log("enemy dice started");
             switch (EventNumber)
             {
@@ -95,6 +97,10 @@ public class EnemyManager : MonoBehaviour
                 case 5:
                     RunEventOnceWithChanges(IncreaseSpawnRate, SpawnRateAddon = Random.Range(0.1f, 0.8f), SpawnEvent = true);
                     break;
+                case 6:
+                    RunEventOnceWithChanges(EnableCollisionWithEnemies);
+                    break;
+
                 default:
                     break;
             }
@@ -176,9 +182,16 @@ public class EnemyManager : MonoBehaviour
             {
                 spawn.Spawnrate -= SpawnRateAddon;
                 spawn.StatsChangedByEvent= true;
-            }
-               
+            }    
         }
+    }
+
+    public void EnableCollisionWithEnemies()
+    {
+        Debug.Log("collide with other enemies");
+        EnemyAi.EnableEnemyCollsion = true;
+        EnemyAi.rb.drag = 0;
+        EnemyAi.rb.angularDrag = 0;
     }
 
     public void  ReverseEnemyAndSpawnChnages()
@@ -190,8 +203,13 @@ public class EnemyManager : MonoBehaviour
 
         foreach (SpawnManager1 spawn in EnmeySpawnList)
         {
+            spawn.Spawnrate = 1.5f;
             spawn.StatsChangedByEvent = false;
         }
+
+        EnemyAi.EnableEnemyCollsion = false;
+        EnemyAi.rb.drag = 13;
+        EnemyAi.rb.angularDrag = 0.1f;
 
     }
     public void AddEnemyToList(EnemyAi enemy)
@@ -213,6 +231,12 @@ public class EnemyManager : MonoBehaviour
         EnmeySpawnList.Remove(spawn);
     }
 
+
+    void RunEventOnceWithChanges(EnemyDiceEvent RandomEvent)
+    {
+        EnemyEvent = RandomEvent;
+        RandomEvent();
+    }
     void RunEventOnceWithChanges<T>(EnemyDiceEvent RandomEvent,T SpecifyChange)
     {
         EnemyEvent = RandomEvent;

@@ -42,24 +42,28 @@ Preset:
     value: Player
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: CurrentHealth
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: MaxHealth
     value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: CurrentHealth
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: Damage
     value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: PushForce
-    value: 1
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
     propertyPath: MoveSpeed
     value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: StatsChangedByEvent
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: CollisionForce
+    value: 1000
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: Agent
