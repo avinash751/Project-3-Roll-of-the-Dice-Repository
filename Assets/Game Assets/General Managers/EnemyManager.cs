@@ -78,7 +78,7 @@ public class EnemyManager : MonoBehaviour
         if (!EventPlayed && GameManager.instance.CurrentTime > TotalTimeForEvent  && TimeConfirmed)
         {
             ReverseEnemyAndSpawnChnages();
-            EventNumber = Random.Range(1, 7);
+            EventNumber = Random.Range(6, 7);
             Debug.Log("enemy dice started");
             switch (EventNumber)
             {

@@ -91,7 +91,7 @@ public class EnemyAi : MonoBehaviour,IDamagable
 
         }
 
-        if(damagable != null && EnableEnemyCollsion)
+        if(damagable != null && EnableEnemyCollsion && collision.gameObject.tag == "Enemy")
         {
             Debug.Log("enemy collided");
             GameObject dupliacte = Instantiate(sphereCollisionObject, collision.transform.position, Quaternion.identity);
