@@ -6,6 +6,8 @@ public class shooting : MonoBehaviour
 {
     public GameObject bullet;
     public static int ammo = 30;
+    public Transform SpawnPoint;
+    public float bulletSpeed;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +20,8 @@ public class shooting : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0) && ammo != 0)
         {
             ammo--;
-            Instantiate(bullet, transform.position, transform.rotation);
+           GameObject duplicate = Instantiate(bullet, SpawnPoint.transform.position, transform.rotation);
+           duplicate.GetComponent<Rigidbody>().AddForce((SpawnPoint.transform.up * bulletSpeed));
         }
     }
 }

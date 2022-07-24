@@ -16,7 +16,7 @@ public class bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.AddForce(transform.right * speed * Time.deltaTime);
+       // rb.AddForce(FindObjectOfType<playeraiming>().transform.forward * speed * Time.deltaTime);
     }
     private void OnCollisionEnter(Collision collision)
     {
