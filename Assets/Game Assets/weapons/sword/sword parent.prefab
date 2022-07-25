@@ -275,6 +275,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SwordDamage: 2
-  Durability: 30
+  Durability: 100
   collided: 0
-  CollsionCheckrate: 0.3
+  CollsionCheckrate: 0.05
