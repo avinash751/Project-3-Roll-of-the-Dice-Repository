@@ -68,13 +68,14 @@ public class EnemyAi : MonoBehaviour,IDamagable
 
     public void TakeDamage(int Damage)
     {
+
         if (CurrentHealth > 0)
         {
             CurrentHealth -= Damage;
             //Debug.Log("enemy taken Damage");
-            
+
         }
-        else if (CurrentHealth <= 0)
+        if (CurrentHealth <= 0)
         {
             //Debug.Log("enemy died");
             EnemyManager.instance.RemoveEnemyFromList(this);

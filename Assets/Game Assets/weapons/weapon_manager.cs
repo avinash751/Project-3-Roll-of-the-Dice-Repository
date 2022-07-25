@@ -28,7 +28,7 @@ public class weapon_manager : MonoBehaviour
         {
             weapondeactive();
             weaponreset();
-            index = Random.Range(0, 4);
+            index = Random.Range(0, 3);
             cou = index;
             gameObject.transform.GetChild(index).gameObject.SetActive(true);
             

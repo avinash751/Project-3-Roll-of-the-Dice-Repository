@@ -14,9 +14,11 @@ public class Sword : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+       
         IDamagable enemy = collision.gameObject.GetComponent<IDamagable>(); 
         if(enemy != null && !collided)
         {
+            Debug.Log("sword collided");
             collided = true;
             enemy.TakeDamage(SwordDamage);
             collision.gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(250,150,0));
@@ -28,9 +30,9 @@ public class Sword : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         IDamagable enemy = collision.gameObject.GetComponent<IDamagable>();
-        if (enemy != null)
+        if (enemy != null && collided)
         {
-            EnableCollsion();
+            Invoke(nameof(EnableCollsion), CollsionCheckrate);
         }
     }
 

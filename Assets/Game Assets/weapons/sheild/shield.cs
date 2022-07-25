@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class shield : MonoBehaviour
 {
-    public static int health = 20;
+    [SerializeField]public static int health = 100;
+    public bool collided;
+    public float CollsionCheckRate;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,14 +21,29 @@ public class shield : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         IDamagable enemy = collision.gameObject.GetComponent<IDamagable>();
-        if (enemy != null)
+        if (enemy != null && !collided)
         {
-            health = health - 2;
-        }
-        if (health >= 0)
+            collided = true;
+            health = health - 1;
+            if (health <= 0)
+            {
+                gameObject.SetActive(false);
+            }
+        } 
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+
+        IDamagable enemy = collision.gameObject.GetComponent<IDamagable>();
+        if(enemy != null && collided)
         {
-            gameObject.SetActive(false);
+            Invoke(nameof(EnableCollsion),CollsionCheckRate);
         }
-         
+    }
+
+    void EnableCollsion()
+    {
+        collided = false;
     }
 }
